@@ -1,0 +1,34 @@
+./start.sh
+# Build
+make
+
+# Just identify your device (no bypass)
+./tr4mpass --detect-only
+
+# Run with full debug output
+./tr4mpass --verbose
+
+# Force a specific bypass path
+./tr4mpass --force-path-a    # checkm8 (A5-A11 devices)
+./tr4mpass --force-path-b    # session activation (A12+ devices)
+
+# Preview what would happen without doing it
+./tr4mpass --dry-run
+DFU Mode -> checkm8 exploit -> load ramdisk -> jailbreak kernel
+-> inject activation record -> cleanup Setup.app -> verify
+DFU Mode -> identity manipulation -> signal detection
+-> session handshake -> activation record -> cleanup -> verify
++-------------------------+
+|        start.sh         |  Guided wrapper (OS detect, deps, DFU guide)
++-------------------------+
+|         main.c          |  CLI, device detection, path selection
++-------------------------+
+|  Path A    |   Path B   |  Bypass strategies
++------------+------------+
+| checkm8    | identity   |  Exploit / manipulation
+| jailbreak  | session    |  Activation protocol
++------------+------------+
+| DFU protocol | activation record | deletescript |
++--------------+-------------------+--------------+
+| libusb | libimobiledevice | libplist | OpenSSL  |
++--------+------------------+---------+----------+
